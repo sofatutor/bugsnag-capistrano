@@ -1,0 +1,8 @@
+
+# Load bugsnag
+require 'bugsnag/capistrano'
+
+set :bugsnag_api_key, 'YOUR_API_KEY'
+
+task :deploy do
+end
