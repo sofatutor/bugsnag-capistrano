@@ -4,9 +4,17 @@ require "capistrano/setup"
 # Include default deployment tasks
 require "capistrano/deploy"
 require "capistrano/scm/git"
+require "pp"
 install_plugin Capistrano::SCM::Git
 
 # Load bugsnag
+require 'bugsnag'
 require 'bugsnag/capistrano'
 
-set :bugsnag_api_key, 'YOUR_API_KEY'
+set :bugsnag_api_key, ENV['BUGSNAG_API_KEY'] || 'YOUR_API_KEY'
+set :bugsnag_endpoint, ENV['BUGSNAG_ENDPOINT'] || Bugsnag::Configuration::DEFAULT_ENDPOINT
+set :bugsnag_env, ENV["BUGSNAG_RELEASE_STAGE"] || 'production'
+set :current_revision, ENV["BUGSNAG_REVISION"]
+set :repo_url, ENV["BUGSNAG_REPOSITORY"]
+set :bugsnag_use_ssl, ENV["BUGSNAG_USE_SSL"] || false
+set :app_version, ENV["BUGSNAG_APP_VERSION"]
