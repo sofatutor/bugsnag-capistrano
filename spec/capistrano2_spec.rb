@@ -4,14 +4,11 @@ require 'rspec/mocks'
 
 require 'webrick'
 
-describe "bugsnag capistrano" do
+describe "bugsnag capistrano 2", :cap_2 do
 
   server = nil
   queue = Queue.new
-  example_path = File.join(File.dirname(__FILE__), '../examples/capistrano3')
-  Dir.chdir(example_path) do
-    system("bundle install")
-  end
+  example_path = File.join(File.dirname(__FILE__), '../examples/capistrano2')
 
   before do
     server = WEBrick::HTTPServer.new :Port => 0, :Logger => WEBrick::Log.new("/dev/null"), :AccessLog => []
@@ -34,7 +31,7 @@ describe "bugsnag capistrano" do
     ENV['BUGSNAG_ENDPOINT'] = "localhost:" + server.config[:Port].to_s
     
     Dir.chdir(example_path) do
-      system("bundle exec cap test deploy > /dev/null 2>&1")
+      system("bundle exec cap deploy")
     end
 
     payload = request()
@@ -52,7 +49,7 @@ describe "bugsnag capistrano" do
     ENV['BUGSNAG_REPOSITORY'] = "test@repo.com:test/test_repo.git"
 
     Dir.chdir(example_path) do
-      system("bundle exec cap test deploy > /dev/null 2>&1")
+      system("bundle exec cap deploy > /dev/null 2>&1")
     end
 
     payload = request()

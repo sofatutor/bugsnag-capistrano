@@ -24,6 +24,12 @@ end
 # RSpec tasks
 require 'rspec/core'
 require "rspec/core/rake_task"
-RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new(:cap_3_test) do |opts|
+  opts.rspec_opts = "--tag cap_3"
+end
 
-task :default  => :spec
+RSpec::Core::RakeTask.new(:cap_2_test) do |opts|
+  opts.rspec_opts = "--tag cap_2"
+end
+
+task :default  => ENV['CAP_2_TEST'] == 'true' ? :cap_2_test : :cap_3_test

@@ -11,16 +11,16 @@ module Bugsnag
             begin
               Bugsnag::Deploy.notify({
                 :api_key => fetch(:bugsnag_api_key, ENV["BUGSNAG_API_KEY"]),
-                :release_stage => ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env, "production"),
+                :release_stage => fetch(:bugsnag_env) || ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env) || fetch(:stage) || "production",
                 :revision => fetch(:current_revision, ENV["BUGSNAG_REVISION"]),
-                :repository => fetch(:repository, ENV["BUGSNAG_REPOSITORY"]),
-                :branch => fetch(:branch, ENV["BUGSNAG_BRANCH"],
-                :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]))
+                :repository => fetch(:repo_url, ENV["BUGSNAG_REPOSITORY"]),
+                :branch => fetch(:branch, ENV["BUGSNAG_BRANCH"]),
+                :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
+                :endpoint => fetch(:bugsnag_endpoint, Bugsnag::Configuration::DEFAULT_ENDPOINT)
               })
             rescue
               logger.important("Bugnsag deploy notification failed, #{$!.inspect}")
             end
-
             logger.info "Bugsnag deploy notification complete."
           end
         end

@@ -33,8 +33,7 @@ namespace :bugsnag do
           :repository => fetch(:repo_url, ENV["BUGSNAG_REPOSITORY"]),
           :branch => fetch(:branch, ENV["BUGSNAG_BRANCH"]),
           :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
-          :endpoint => fetch(:bugsnag_endpoint, Bugsnag::Configuration::DEFAULT_ENDPOINT),
-          :use_ssl => fetch(:bugsnag_use_ssl, true)
+          :endpoint => fetch(:bugsnag_endpoint, Bugsnag::Configuration::DEFAULT_ENDPOINT)
         })
       rescue
         error "Bugsnag deploy notification failed, #{$!.inspect}"
