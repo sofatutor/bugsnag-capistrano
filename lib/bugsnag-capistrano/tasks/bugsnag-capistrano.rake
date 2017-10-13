@@ -12,8 +12,8 @@ namespace :bugsnag do
     branch = ENV["BUGSNAG_BRANCH"]
 
     Rake::Task["load"].invoke unless api_key
-
-    Bugsnag::Deploy.notify({
+    
+    Bugsnag::Capistrano::Deploy.notify({
       :api_key => api_key,
       :release_stage => release_stage,
       :app_version => app_version,
