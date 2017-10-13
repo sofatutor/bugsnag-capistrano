@@ -10,11 +10,17 @@ rvm:
 - jruby-19mode
 
 env:
-- CAP_2_TEST=true
-- CAP_2_TEST=false
+- CAP_2_TEST=true WITH_BUGSNAG=true
+- CAP_2_TEST=false WITH_BUGSNAG=false
+- CAP_2_TEST=true WITH_BUGSNAG=false
+- CAP_2_TEST=false WITH_BUGSNAG=true
 
 before_install:
 - gem update --system 2.1.11
 - gem install bundler -v 1.12
 - bundle --version
 - gem --version
+
+install:
+- if [ $WITH_BUGSNAG = true ]; then bundle install --with test bugsnag; fi
+- if [ $WITH_BUGSNAG != true ]; then bundle install --with test; fi

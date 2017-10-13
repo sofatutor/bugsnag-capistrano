@@ -24,12 +24,22 @@ end
 # RSpec tasks
 require 'rspec/core'
 require "rspec/core/rake_task"
-RSpec::Core::RakeTask.new(:cap_3_test) do |opts|
-  opts.rspec_opts = "--tag cap_3"
+
+tags = ''#'--tag notifier '
+
+if ENV['CAP_2_TEST'] == 'true'
+  # tags += '--tag cap_2 '
+else
+  # tags += '--tag cap_3 '
 end
 
-RSpec::Core::RakeTask.new(:cap_2_test) do |opts|
-  opts.rspec_opts = "--tag cap_2"
+if ENV['WITH_BUGSNAG'] == 'true'
+  tags += '--tag with_notifier '
+else
+  tags += '--tag without_notifier '
 end
 
-task :default  => ENV['CAP_2_TEST'] == 'true' ? :cap_2_test : :cap_3_test
+RSpec::Core::RakeTask.new(:spec) do |opts|
+  opts.rspec_opts = tags
+end
+task :default  => :spec

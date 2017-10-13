@@ -1,6 +1,6 @@
 
 # Load bugsnag
-require 'bugsnag/capistrano'
+require 'bugsnag-capistrano'
 
 set :bugsnag_api_key, ENV['BUGSNAG_API_KEY'] || 'YOUR_API_KEY'
 set :bugsnag_endpoint, ENV['BUGSNAG_ENDPOINT'] 

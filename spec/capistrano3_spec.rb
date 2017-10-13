@@ -28,7 +28,7 @@ describe "bugsnag capistrano 3", :cap_3 do
   let(:request) { JSON.parse(queue.pop) }
   
   it "sends a deploy notification to the set endpoint" do
-    ENV['BUGSNAG_ENDPOINT'] = "localhost:" + server.config[:Port].to_s
+    ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s
     
     Dir.chdir(example_path) do
       system("bundle exec cap test deploy > /dev/null 2>&1")
@@ -41,7 +41,7 @@ describe "bugsnag capistrano 3", :cap_3 do
   end
 
   it "allows modifications of deployment characteristics" do
-    ENV['BUGSNAG_ENDPOINT'] = "localhost:" + server.config[:Port].to_s
+    ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s
     ENV['BUGSNAG_API_KEY'] = "this is a test key"
     ENV['BUGSNAG_RELEASE_STAGE'] = "test"
     ENV['BUGSNAG_REVISION'] = "test"

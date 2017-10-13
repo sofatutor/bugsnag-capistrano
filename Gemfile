@@ -10,4 +10,8 @@ group :test, optional: true do
   gem 'capistrano', ENV['CAP_2_TEST'] == 'true' ? '~> 2.15': '~> 3.9'
 end
 
+group :bugsnag, optional: true do
+  gem 'bugsnag'
+end
+
 gemspec
