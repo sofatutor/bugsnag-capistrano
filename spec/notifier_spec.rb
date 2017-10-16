@@ -7,7 +7,7 @@ require 'webrick'
 
 require 'bugsnag-capistrano/notifier'
 
-describe "bugsnag capistrano notifier", :notifier do
+describe "bugsnag capistrano notifier", :always do
   it "delivers a request to the given url" do
     url = "http://localhost:56456"
     stub_request(:post, url)

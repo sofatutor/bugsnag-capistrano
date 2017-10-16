@@ -4,11 +4,13 @@ require 'rspec/mocks'
 
 require 'webrick'
 
-describe "bugsnag capistrano 3", :cap_3 do
+describe "bugsnag capistrano 2", :always do
 
   server = nil
   queue = Queue.new
-  example_path = File.join(File.dirname(__FILE__), '../examples/capistrano3')
+  cap_2 = ENV['CAP_2_TEST'] == 'true'
+  example_path = File.join(File.dirname(__FILE__), cap_2 ? '../examples/capistrano2' : '../examples/capistrano3')
+  exec_string = cap_2 ? 'bundle exec cap deploy > /dev/null 2>&1' : 'bundle exec cap test deploy'
 
   before do
     server = WEBrick::HTTPServer.new :Port => 0, :Logger => WEBrick::Log.new("/dev/null"), :AccessLog => []
@@ -31,13 +33,12 @@ describe "bugsnag capistrano 3", :cap_3 do
     ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s
     
     Dir.chdir(example_path) do
-      system("bundle exec cap test deploy > /dev/null 2>&1")
+      system(exec_string)
     end
 
     payload = request()
     expect(payload["apiKey"]).to eq('YOUR_API_KEY')
     expect(payload["releaseStage"]).to eq('production')
-    expect(payload["branch"]).to eq("master")
   end
 
   it "allows modifications of deployment characteristics" do
@@ -49,14 +50,13 @@ describe "bugsnag capistrano 3", :cap_3 do
     ENV['BUGSNAG_REPOSITORY'] = "test@repo.com:test/test_repo.git"
 
     Dir.chdir(example_path) do
-      system("bundle exec cap test deploy > /dev/null 2>&1")
+      system(exec_string)
     end
 
     payload = request()
     expect(payload["apiKey"]).to eq('this is a test key')
     expect(payload["releaseStage"]).to eq('test')
     expect(payload["repository"]).to eq("test@repo.com:test/test_repo.git")
-    expect(payload["branch"]).to eq("master")
     expect(payload["appVersion"]).to eq("1")
     expect(payload["revision"]).to eq("test")
   end

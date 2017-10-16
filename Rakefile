@@ -25,13 +25,7 @@ end
 require 'rspec/core'
 require "rspec/core/rake_task"
 
-tags = ''#'--tag notifier '
-
-if ENV['CAP_2_TEST'] == 'true'
-  # tags += '--tag cap_2 '
-else
-  # tags += '--tag cap_3 '
-end
+tags = '--tag always '
 
 if ENV['WITH_BUGSNAG'] == 'true'
   tags += '--tag with_notifier '
