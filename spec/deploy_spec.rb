@@ -6,7 +6,6 @@ require 'logger'
 require 'webrick'
 
 require 'bugsnag-capistrano/deploy'
-require 'bugsnag-capistrano/notifier'
 
 describe Bugsnag::Capistrano::Deploy do
   describe "with notifier loadable", :with_notifier do
@@ -32,8 +31,34 @@ describe Bugsnag::Capistrano::Deploy do
 
   describe "without notifier loadable", :without_notifier do
     it "should call notify_without bugsnag" do
-      expect(Bugsnag::Capistrano::Notifier).to receive(:deliver)
+      expect(Bugsnag::Capistrano::Deploy).to receive(:deliver)
       Bugsnag::Capistrano::Deploy.notify({:api_key => "test"})
+    end
+  end
+
+  describe "the delivery function", :always do
+    it "delivers a request to the given url" do
+      url = "http://localhost:56456"
+      stub_request(:post, url)
+        .to_return(status:200, body: "")
+      Bugsnag::Capistrano::Deploy.deliver(url, nil)
+    end
+
+    it "delivers a body unmodified" do
+      body = {
+        "paramA" => 'a',
+        "paramB" => 'b',
+        "paramHash" => {
+          "one" => 1,
+          "two" => 2,
+          "three" => 3
+        }
+      }
+      url = "http://localhost:56456"
+      stub_request(:post, url)
+        .with(body: body, headers: { 'Content-Type' => 'application/json'})
+        .to_return(status:200, body: "")
+      Bugsnag::Capistrano::Deploy.deliver(url, body)
     end
   end
 end

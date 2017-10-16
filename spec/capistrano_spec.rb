@@ -4,7 +4,7 @@ require 'rspec/mocks'
 
 require 'webrick'
 
-describe "bugsnag capistrano 2", :always do
+describe "bugsnag capistrano", :always do
 
   server = nil
   queue = Queue.new
@@ -13,7 +13,7 @@ describe "bugsnag capistrano 2", :always do
   exec_string = cap_2 ? 'bundle exec cap deploy > /dev/null 2>&1' : 'bundle exec cap test deploy > /dev/null 2>&1'
 
   before do
-    server = WEBrick::HTTPServer.new :Port => 0, :Logger => WEBrick::Log.new("/dev/null"), :AccessLog => []
+    server = WEBrick::HTTPServer.new :Port => 0, :Logger => WEBrick::Log.new(STDOUT), :AccessLog => []
     server.mount_proc '/deploy' do |req, res|
       queue.push req.body
       res.status = 200
@@ -30,7 +30,7 @@ describe "bugsnag capistrano 2", :always do
   let(:request) { JSON.parse(queue.pop) }
   
   it "sends a deploy notification to the set endpoint" do
-    ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s
+    ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s + "/deploy"
     
     Dir.chdir(example_path) do
       system(exec_string)
@@ -42,7 +42,7 @@ describe "bugsnag capistrano 2", :always do
   end
 
   it "allows modifications of deployment characteristics" do
-    ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s
+    ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s + "/deploy"
     ENV['BUGSNAG_API_KEY'] = "this is a test key"
     ENV['BUGSNAG_RELEASE_STAGE'] = "test"
     ENV['BUGSNAG_REVISION'] = "test"

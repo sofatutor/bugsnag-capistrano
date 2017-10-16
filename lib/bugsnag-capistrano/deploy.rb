@@ -1,11 +1,12 @@
 require "json"
-require_relative "notifier"
+require "net/http"
 
 module Bugsnag
   module Capistrano
     class Deploy
 
-      DEFAULT_DEPLOY_ENDPOINT = "https://notify.bugsnag.com"
+      HEADERS = {"Content-Type" => "application/json"}
+      DEFAULT_DEPLOY_ENDPOINT = "https://notify.bugsnag.com/deploy"
 
       def self.notify(opts = {})
         begin
@@ -28,9 +29,9 @@ module Bugsnag
         end
 
         if Gem::Version.new(Bugsnag::VERSION).release >= Gem::Version.new('6.0.0')
-          endpoint = configuration.endpoint + "/deploy"
+          endpoint = configuration.endpoint
         else
-          endpoint = (configuration.use_ssl ? "https://" : "http://") + configuration.endpoint + "/deploy"
+          endpoint = (configuration.use_ssl ? "https://" : "http://") + configuration.endpoint
         end
 
         parameters = {
@@ -46,11 +47,11 @@ module Bugsnag
 
 
         payload_string = ::JSON.dump(parameters)
-        Bugsnag::Delivery::Synchronous.deliver(endpoint, payload_string, configuration)
+        self.deliver(endpoint, payload_string, configuration)
       end
       
       def self.notify_without_bugsnag(opts = {})
-        endpoint = (opts[:endpoint].nil? ? DEFAULT_DEPLOY_ENDPOINT : opts[:endpoint]) + "/deploy"
+        endpoint = (opts[:endpoint].nil? ? DEFAULT_DEPLOY_ENDPOINT : opts[:endpoint])
 
         parameters = {
           "apiKey" => opts[:api_key],
@@ -64,7 +65,33 @@ module Bugsnag
         raise RuntimeError.new("No API key found when notifying of deploy") if !parameters["apiKey"] || parameters["apiKey"].empty?
 
         payload_string = ::JSON.dump(parameters)
-        Bugsnag::Capistrano::Notifier.deliver(endpoint, payload_string)
+        self.deliver(endpoint, payload_string)
+      end
+
+      def self.deliver(url, body)
+        logger = Logger.new(STDOUT)
+        logger.level = Logger::INFO
+        begin
+          response = request(url, body)
+          puts("Notification to #{url} finished, response was #{response.code}, payload was #{body}")
+        rescue StandardError => e
+          logger.warn("Notification to #{url} failed, #{e.inspect}")
+          logger.warn(e.backtrace)
+        end
+      end
+ 
+      def self.request(url, body)
+        uri = URI.parse(url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.read_timeout = 15
+        http.open_timeout = 15
+
+        http.use_ssl = uri.scheme == "https"
+
+        uri.path == "" ? "/" : uri.path
+        request = Net::HTTP::Post.new(uri, HEADERS)
+        request.body = body
+        http.request(request)
       end
     end
   end
