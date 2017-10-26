@@ -47,7 +47,7 @@ module Bugsnag
 
 
         payload_string = ::JSON.dump(parameters)
-        self.deliver(endpoint, payload_string, configuration)
+        Bugsnag::Delivery::Synchronous.deliver(endpoint, payload_string, configuration)
       end
       
       def self.notify_without_bugsnag(opts = {})
