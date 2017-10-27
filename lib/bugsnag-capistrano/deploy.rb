@@ -12,7 +12,7 @@ module Bugsnag
         begin
           require 'bugsnag'
           self.notify_using_bugsnag(opts)
-        rescue LoadError => e
+        rescue LoadError
           self.notify_without_bugsnag(opts)
         end
       end
