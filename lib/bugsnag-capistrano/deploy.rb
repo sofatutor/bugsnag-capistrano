@@ -72,8 +72,7 @@ module Bugsnag
         logger = Logger.new(STDOUT)
         logger.level = Logger::INFO
         begin
-          response = request(url, body)
-          puts("Notification to #{url} finished, response was #{response.code}, payload was #{body}")
+          request(url, body)
         rescue StandardError => e
           logger.warn("Notification to #{url} failed, #{e.inspect}")
           logger.warn(e.backtrace)
