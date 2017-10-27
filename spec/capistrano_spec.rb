@@ -9,8 +9,9 @@ describe "bugsnag capistrano", :always do
   server = nil
   queue = Queue.new
   cap_2 = ENV['CAP_2_TEST'] == 'true'
-  example_path = File.join(File.dirname(__FILE__), cap_2 ? '../examples/capistrano2' : '../examples/capistrano3')
+  fixture_path = cap_2 ? '../examples/capistrano2' : '../examples/capistrano3'
   exec_string = cap_2 ? 'bundle exec cap deploy' : 'bundle exec cap test deploy'
+  example_path = File.join(File.dirname(__FILE__), fixture_path)
 
   before do
     server = WEBrick::HTTPServer.new :Port => 0, :Logger => WEBrick::Log.new(STDOUT), :AccessLog => []
