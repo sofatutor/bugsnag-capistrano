@@ -2,6 +2,7 @@ require 'webmock/rspec'
 require 'rspec/expectations'
 require 'rspec/mocks'
 require 'logger'
+require 'json'
 
 require 'webrick'
 
@@ -45,7 +46,7 @@ describe Bugsnag::Capistrano::Deploy do
     end
 
     it "delivers a body unmodified" do
-      body = {
+      body = ::JSON.dump({
         "paramA" => 'a',
         "paramB" => 'b',
         "paramHash" => {
@@ -53,12 +54,13 @@ describe Bugsnag::Capistrano::Deploy do
           "two" => 2,
           "three" => 3
         }
-      }
+      })
       url = "http://localhost:56456"
-      stub_request(:post, url)
+      request = stub_request(:post, url)
         .with(body: body, headers: { 'Content-Type' => 'application/json'})
         .to_return(status:200, body: "")
       Bugsnag::Capistrano::Deploy.deliver(url, body)
+      assert_requested request
     end
   end
 end
