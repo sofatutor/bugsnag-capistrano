@@ -25,7 +25,7 @@ end
 require 'rspec/core'
 require "rspec/core/rake_task"
 
-tags = '--tag always '
+tags = '--format documentation --tag always '
 
 if ENV['WITH_BUGSNAG'] == 'true'
   tags += '--tag with_notifier '
