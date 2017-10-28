@@ -9,19 +9,19 @@ module Bugsnag
           desc "Notify Bugsnag that new production code has been deployed"
           task :deploy, :except => { :no_release => true }, :on_error => :continue do
             begin
-              Bugsnag::Deploy.notify({
+              Bugsnag::Capistrano::Deploy.notify({
                 :api_key => fetch(:bugsnag_api_key, ENV["BUGSNAG_API_KEY"]),
                 :release_stage => fetch(:bugsnag_env) || ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env) || fetch(:stage) || "production",
                 :revision => fetch(:current_revision, ENV["BUGSNAG_REVISION"]),
                 :repository => fetch(:repo_url, ENV["BUGSNAG_REPOSITORY"]),
                 :branch => fetch(:branch, ENV["BUGSNAG_BRANCH"]),
                 :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
-                :endpoint => fetch(:bugsnag_endpoint, Bugsnag::Configuration::DEFAULT_ENDPOINT)
+                :endpoint => fetch(:bugsnag_endpoint)
               })
+              logger.info "Bugsnag deploy notification complete."
             rescue
               logger.important("Bugnsag deploy notification failed, #{$!.inspect}")
             end
-            logger.info "Bugsnag deploy notification complete."
           end
         end
       end
