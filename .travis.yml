@@ -9,18 +9,28 @@ rvm:
 - 1.9.3
 - jruby-19mode
 
-env:
-- CAP_2_TEST=true WITH_BUGSNAG=true
-- CAP_2_TEST=false WITH_BUGSNAG=false
-- CAP_2_TEST=true WITH_BUGSNAG=false
-- CAP_2_TEST=false WITH_BUGSNAG=true
-
 before_install:
 - gem update --system 2.1.11
 - gem install bundler -v 1.12
 - bundle --version
 - gem --version
 
-install:
-- if [ $WITH_BUGSNAG = true ]; then bundle install --with test bugsnag; fi
-- if [ $WITH_BUGSNAG != true ]; then bundle install --with test; fi
+before_script:
+- bundle list | grep 'bugsnag\|capistrano'
+- bundle exec cap --version
+script: bundle exec rake spec
+
+jobs:
+  include:
+  - stage: test
+    env: CAP_2_TEST=true
+    install: bundle install --with test bugsnag
+  - stage: test
+    env: CAP_2_TEST=true
+    install: bundle install --with test --without bugsnag
+  - stage: test
+    env: CAP_2_TEST=false
+    install: bundle install --with test bugsnag
+  - stage: test
+    env: CAP_2_TEST=false
+    install: bundle install --with test --without bugsnag
