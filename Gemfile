@@ -11,7 +11,7 @@ group :test, optional: true do
 end
 
 group :bugsnag, optional: true do
-  gem 'bugsnag', :git => 'https://github.com/bugsnag/bugsnag-ruby', :branch => 'v5'
+  gem 'bugsnag', '~> 6.0.0'
 end
 
 gemspec
