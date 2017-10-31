@@ -11,7 +11,7 @@ group :test, optional: true do
 end
 
 group :bugsnag, optional: true do
-  gem 'bugsnag', '~> 6.0.0'
+  gem 'bugsnag', '~> 6.0'
 end
 
 gemspec
