@@ -29,7 +29,7 @@ Instructions on running the example apps can be found within the `README.md` fil
 ## Submitting a Change
 
 * [Fork](https://help.github.com/articles/fork-a-repo) the
-  [notifier on github](https://github.com/bugsnag/bugsnag-bugsnag-capistrano)
+  [notifier on github](https://github.com/bugsnag/bugsnag-capistrano)
 * Commit and push until you are happy with your contribution
 * Run the tests with and ensure all pass
 * [Submit a pull request](https://help.github.com/articles/using-pull-requests)
@@ -66,5 +66,5 @@ bugsnag-capistrano.
     ```
     bundle exec rake release
     ```
-    
+
 * Update docs.bugsnag.com with any new content
