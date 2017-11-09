@@ -26,7 +26,9 @@ As an alternative, environment variables can be used to configure bugsnag-capist
 Further configuration options available to Capistrano read the [deploy-tracking guide.](https://docs.bugsnag.com/platforms/ruby/other/deploy-tracking/)
 
 
-## Running the exampleNow when your deployments are made with Capistrano Bugsnag will automatically be notified.
+## Running the example
+
+Now when your deployments are made with Capistrano Bugsnag will automatically be notified.
 
 You can test this by running:
 ```shell
