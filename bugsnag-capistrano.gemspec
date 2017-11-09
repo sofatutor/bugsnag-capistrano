@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.name = "bugsnag-capistrano"
   s.version = File.read("VERSION").strip
 
-  s.authors = ["Keegan Lowenstein", "Martin Holman"]
+  s.authors = ["Keegan Lowenstein", "Martin Holman", "Alex Moinet", "Delisa Mason"]
   s.email = "keegan@bugsnag.com"
 
   s.summary = "Notify Bugsnag when deploying with Capistrano"
@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/bugsnag/bugsnag-capistrano"
   s.licenses = ["MIT"]
 
-  s.files = `git ls-files`.split("\n").reject {|file| file.start_with? "example/"}
+  s.files = `git ls-files`.split("\n").reject {|file| file.start_with? "examples/"}
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md",
