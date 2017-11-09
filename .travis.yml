@@ -15,6 +15,8 @@ before_install:
 - bundle --version
 - gem --version
 
+install: bundle install --with test
+
 before_script:
 - bundle list | grep 'bugsnag\|capistrano'
 script: bundle exec rake spec
