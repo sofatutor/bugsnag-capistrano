@@ -6,10 +6,18 @@ application with [Capistrano](https://github.com/capistrano/capistrano),
 allowing to correlate deploys with new errors and increased error rates in
 Bugsnag.
 
+It also includes a Rake task for manually sending deploy notifications or
+for projects not using Capistrano.
+
 [Bugsnag](http://bugsnag.com) captures errors in real-time from your web,
 mobile and desktop applications, helping you to understand and resolve them
 as fast as possible. [Create a free account](http://bugsnag.com) to start
 capturing exceptions from your applications.
+
+## Getting started
+
+* [Integrating with Capistrano](https://docs.bugsnag.com/api/deploy-tracking/capistrano/)
+* [Integrating with Rake](https://docs.bugsnag.com/api/deploy-tracking/rake/)
 
 ## Contributing
 
@@ -20,6 +28,6 @@ and release `bugsnag-capistrano`, see our
 
 ## License
 
-The Bugsnag Cocoa library is free software released under the MIT License.
+The Bugsnag Capistrano library is free software released under the MIT License.
 See [LICENSE.txt](https://github.com/bugsnag/bugsnag-capistrano/blob/master/LICENSE.txt)
 for details.
