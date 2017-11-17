@@ -1,5 +1,6 @@
 require "json"
 require "net/http"
+require "logger"
 
 module Bugsnag
   module Capistrano
