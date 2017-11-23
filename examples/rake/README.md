@@ -25,9 +25,26 @@ Further details about tracking deploys with Bugsnag can be found [here.](https:/
 
 ## Usage
 
+### Deploying
+
 Run the `bugsnag:deploy` including your API key, release stage, and app version:
 
 ```
 rake bugsnag:deploy BUGSNAG_API_KEY=YOUR-API-KEY \
                     BUGSNAG_RELEASE_STAGE=production
+```
+
+### Adding Heroku hooks
+
+Run the `bugsnag:heroku:add_deploy_hooks` command, including API key, release stage, and app version.
+
+```
+rake bugsnag:heroku:add_deploy_hooks BUGSNAG_API_KEY=YOUR-API-KEY \
+                    BUGSNAG_RELEASE_STAGE=production
+```
+
+If you haave multiple Heroku apps the app to add the hook to can be specified by the `HEROKU_APP` environment variable:
+
+```
+rake bugsnag:heroku:add_deploy_hooks HEROKU_APP=your_heroku_app
 ```
