@@ -1,3 +1,11 @@
+## 1.1.1 (14-12-2017)
+
+### Fixes
+
+* Load BUGSNAG_RELEASE_STAGE before RAILS_ENV
+  | [#6](https://github.com/bugsnag/bugsnag-capistrano/pull/6)
+  | [Samnang Chhun](https://github.com/samnang)
+
 ## 1.1.0 (23-11-2017)
 
 ### Enhancements
