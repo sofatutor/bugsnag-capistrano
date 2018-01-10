@@ -7,7 +7,7 @@ module Bugsnag
     class Deploy
 
       HEADERS = {"Content-Type" => "application/json"}
-      DEFAULT_DEPLOY_ENDPOINT = "https://notify.bugsnag.com/deploy"
+      DEFAULT_DEPLOY_ENDPOINT = "https://build.bugsnag.com"
 
       def self.notify(opts = {})
         begin
@@ -35,38 +35,58 @@ module Bugsnag
           endpoint = (configuration.use_ssl ? "https://" : "http://") + configuration.endpoint
         end
 
+        sourceControl = {
+          "revision" => opts[:revision],
+          "repository" => opts[:repository],
+          "provider" => opts[:provider] || opts[:repository] ? get_provider(opts[:repository]) : nil
+        }.reject {|k,v| v == nil}
+
         parameters = {
           "apiKey" => configuration.api_key,
           "releaseStage" => configuration.release_stage,
           "appVersion" => configuration.app_version,
-          "revision" => opts[:revision],
-          "repository" => opts[:repository],
-          "branch" => opts[:branch]
-        }.reject {|k,v| v == nil}
+          "sourceControl" => sourceControl,
+          "builderName" => opts[:builder] || %x(whoami)
+        }.reject {|k,v| v == nil || v == {}}
 
         raise RuntimeError.new("No API key found when notifying of deploy") if !parameters["apiKey"] || parameters["apiKey"].empty?
 
-
         payload_string = ::JSON.dump(parameters)
-        Bugsnag::Delivery::Synchronous.deliver(endpoint, payload_string, configuration)
+        self.deliver(endpoint, payload_string)
       end
-      
+
       def self.notify_without_bugsnag(opts = {})
         endpoint = (opts[:endpoint].nil? ? DEFAULT_DEPLOY_ENDPOINT : opts[:endpoint])
+
+        sourceControl = {
+          "revision" => opts[:revision],
+          "repository" => opts[:repository],
+          "provider" => opts[:provider] || opts[:repository] ? get_provider(opts[:repository]) : nil
+        }.reject {|k,v| v == nil}
 
         parameters = {
           "apiKey" => opts[:api_key],
           "releaseStage" => opts[:release_stage],
           "appVersion" => opts[:app_version],
-          "revision" => opts[:revision],
-          "repository" => opts[:repository],
-          "branch" => opts[:branch]
-        }.reject {|k, v| v == nil}
-        
+          "sourceControl" => sourceControl,
+          "builderName" => opts[:builder] || %x(whoami)
+        }.reject {|k, v| v == nil || v == {}}
+
         raise RuntimeError.new("No API key found when notifying of deploy") if !parameters["apiKey"] || parameters["apiKey"].empty?
 
         payload_string = ::JSON.dump(parameters)
         self.deliver(endpoint, payload_string)
+      end
+
+      def self.get_provider(repository)
+        provider = nil
+        if repository.include? "github.com"
+          provider = "github"
+        elsif repository.include? "bitbucket.com"
+          provider = "bitbucket"
+        elsif repository.include? "gitlab.com"
+          provider = "gitlab"
+        end
       end
 
       def self.deliver(url, body)
@@ -79,7 +99,7 @@ module Bugsnag
           logger.warn(e.backtrace)
         end
       end
- 
+
       def self.request(url, body)
         uri = URI.parse(url)
         http = Net::HTTP.new(uri.host, uri.port)

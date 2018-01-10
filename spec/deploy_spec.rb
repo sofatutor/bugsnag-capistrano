@@ -23,9 +23,9 @@ describe Bugsnag::Capistrano::Deploy do
     after do
       Bugsnag.configuration.clear_request_data
     end
-    
+
     it "should call notify_with_bugsnag" do
-      expect(Bugsnag::Delivery::Synchronous).to receive(:deliver)
+      expect(Bugsnag::Capistrano::Deploy).to receive(:deliver)
       Bugsnag::Capistrano::Deploy.notify()
     end
   end
@@ -34,6 +34,14 @@ describe Bugsnag::Capistrano::Deploy do
     it "should call notify_without bugsnag" do
       expect(Bugsnag::Capistrano::Deploy).to receive(:deliver)
       Bugsnag::Capistrano::Deploy.notify({:api_key => "test"})
+    end
+  end
+
+  describe "the get_provider function", :always do
+    it "returns the correct providers" do
+      expect(Bugsnag::Capistrano::Deploy.get_provider('git://github.com/test/test')).to eq('github')
+      expect(Bugsnag::Capistrano::Deploy.get_provider('https://test.bitbucket.com/test/test')).to eq('bitbucket')
+      expect(Bugsnag::Capistrano::Deploy.get_provider('https://gitlab.com/test/test')).to eq('gitlab')
     end
   end
 
