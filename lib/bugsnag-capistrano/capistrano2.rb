@@ -17,7 +17,7 @@ module Bugsnag
                 :provider => fetch(:provider, ENV["BUGSNAG_BRANCH"]),
                 :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
                 :endpoint => fetch(:bugsnag_endpoint),
-                :builder => fetch(:builder)
+                :builder => fetch(:builder, ENV["BUGSNAG_BUILDER"])
               })
               logger.info "Bugsnag deploy notification complete."
             rescue
