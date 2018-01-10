@@ -8,6 +8,7 @@ module Bugsnag
 
       HEADERS = {"Content-Type" => "application/json"}
       DEFAULT_DEPLOY_ENDPOINT = "https://build.bugsnag.com"
+      BUILD_TOOL_NAME = "bugsnag-capistrano"
 
       def self.notify(opts = {})
         begin
@@ -38,7 +39,7 @@ module Bugsnag
         sourceControl = {
           "revision" => opts[:revision],
           "repository" => opts[:repository],
-          "provider" => opts[:provider] || opts[:repository] ? get_provider(opts[:repository]) : nil
+          "provider" => opts[:provider]
         }.reject {|k,v| v == nil}
 
         parameters = {
@@ -46,7 +47,8 @@ module Bugsnag
           "releaseStage" => configuration.release_stage,
           "appVersion" => configuration.app_version,
           "sourceControl" => sourceControl,
-          "builderName" => opts[:builder] || %x(whoami)
+          "builderName" => opts[:builder] || %x(whoami),
+          "buildTool" => BUILD_TOOL_NAME
         }.reject {|k,v| v == nil || v == {}}
 
         raise RuntimeError.new("No API key found when notifying of deploy") if !parameters["apiKey"] || parameters["apiKey"].empty?
@@ -61,7 +63,7 @@ module Bugsnag
         sourceControl = {
           "revision" => opts[:revision],
           "repository" => opts[:repository],
-          "provider" => opts[:provider] || opts[:repository] ? get_provider(opts[:repository]) : nil
+          "provider" => opts[:provider]
         }.reject {|k,v| v == nil}
 
         parameters = {
@@ -69,24 +71,14 @@ module Bugsnag
           "releaseStage" => opts[:release_stage],
           "appVersion" => opts[:app_version],
           "sourceControl" => sourceControl,
-          "builderName" => opts[:builder] || %x(whoami)
+          "builderName" => opts[:builder] || %x(whoami),
+          "buildTool" => BUILD_TOOL_NAME
         }.reject {|k, v| v == nil || v == {}}
 
         raise RuntimeError.new("No API key found when notifying of deploy") if !parameters["apiKey"] || parameters["apiKey"].empty?
 
         payload_string = ::JSON.dump(parameters)
         self.deliver(endpoint, payload_string)
-      end
-
-      def self.get_provider(repository)
-        provider = nil
-        if repository.include? "github.com"
-          provider = "github"
-        elsif repository.include? "bitbucket.com"
-          provider = "bitbucket"
-        elsif repository.include? "gitlab.com"
-          provider = "gitlab"
-        end
       end
 
       def self.deliver(url, body)

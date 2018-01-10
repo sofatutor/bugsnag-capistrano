@@ -63,6 +63,7 @@ describe "bugsnag rake", :always do
       "revision" => "test"
     })
     expect(payload["builderName"]).to eq("testbuilder")
+    expect(payload["buildTool"]).to eq("bugsnag-capistrano")
   end
 end
 

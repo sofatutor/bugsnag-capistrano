@@ -37,14 +37,6 @@ describe Bugsnag::Capistrano::Deploy do
     end
   end
 
-  describe "the get_provider function", :always do
-    it "returns the correct providers" do
-      expect(Bugsnag::Capistrano::Deploy.get_provider('git://github.com/test/test')).to eq('github')
-      expect(Bugsnag::Capistrano::Deploy.get_provider('https://test.bitbucket.com/test/test')).to eq('bitbucket')
-      expect(Bugsnag::Capistrano::Deploy.get_provider('https://gitlab.com/test/test')).to eq('gitlab')
-    end
-  end
-
   describe "the delivery function", :always do
     it "delivers a request to the given url" do
       url = "http://localhost:56456"
