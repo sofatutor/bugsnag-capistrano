@@ -49,6 +49,7 @@ describe "bugsnag rake", :always do
     ENV['BUGSNAG_APP_VERSION'] = "1"
     ENV['BUGSNAG_REPOSITORY'] = "test@repo.com:test/test_repo.git"
     ENV['BUGSNAG_BUILDER'] = "testbuilder"
+    ENV["BUGSNAG_PROVIDER"] = "github"
 
     Dir.chdir(example_path) do
       system(exec_string)
@@ -60,7 +61,8 @@ describe "bugsnag rake", :always do
     expect(payload["appVersion"]).to eq("1")
     expect(payload["sourceControl"]).to eq({
       "repository" => "test@repo.com:test/test_repo.git",
-      "revision" => "test"
+      "revision" => "test",
+      "provider" => "github"
     })
     expect(payload["builderName"]).to eq("testbuilder")
     expect(payload["buildTool"]).to eq("bugsnag-capistrano")
