@@ -1,23 +1,16 @@
 namespace :load do
-
   task :defaults do
-
     set :bugsnag_default_hooks, ->{ true }
-
   end
-
 end
 
 namespace :deploy do
-
   before :starting, :bugsnag_hooks do
     invoke 'bugsnag:add_default_hooks' if fetch(:bugsnag_default_hooks)
   end
-
 end
 
 namespace :bugsnag do
-
   task :add_default_hooks do
     after 'deploy:published', 'bugsnag:deploy'
   end
@@ -26,13 +19,15 @@ namespace :bugsnag do
   task :deploy do
     run_locally do
       begin
-        Bugsnag::Capistrano::Deploy.notify({
+        Bugsnag::Capistrano::Release.notify({
           :api_key => fetch(:bugsnag_api_key, ENV["BUGSNAG_API_KEY"]),
+          :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
+          :builder_name => fetch(:bugsnag_builder, ENV["BUGSNAG_BUILDER_NAME"], ENV["USER"])
+          :metadata => fetch(:bugsnag_metadata)
           :release_stage => fetch(:bugsnag_env) || ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env) || fetch(:stage) || "production",
           :revision => fetch(:current_revision, ENV["BUGSNAG_REVISION"]),
           :repository => fetch(:repo_url, ENV["BUGSNAG_REPOSITORY"]),
-          :branch => fetch(:branch, ENV["BUGSNAG_BRANCH"]),
-          :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
+          :provider => fetch(:bugsnag_source_control_provider, ENV["BUGSNAG_SOURCE_CONTROL_PROVIDER"]),
           :endpoint => fetch(:bugsnag_endpoint)
         })
         info 'Bugsnag deploy notification complete.'
@@ -41,6 +36,5 @@ namespace :bugsnag do
       end
     end
   end
-
 end
 # vi:ft=ruby
