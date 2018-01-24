@@ -40,7 +40,7 @@ module Bugsnag
         }
 
         payload_string = ::JSON.dump(parameters)
-        self.deliver(endpoint, payload_string)
+        self.deliver(opts[:endpoint], payload_string)
       end
 
       def self.deliver(url, body)

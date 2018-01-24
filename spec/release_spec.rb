@@ -6,34 +6,13 @@ require 'json'
 
 require 'webrick'
 
-require 'bugsnag-capistrano/deploy'
+require 'bugsnag-capistrano/release'
 
-describe Bugsnag::Capistrano::Deploy do
-  describe "with notifier loadable", :with_notifier do
-
-    before do
-      require "bugsnag"
-      Bugsnag.configure do |config|
-        config.api_key = "TEST_API_KEY"
-        config.release_stage = "production"
-        config.logger = Logger.new(StringIO.new)
-      end
-    end
-
-    after do
-      Bugsnag.configuration.clear_request_data
-    end
-    
-    it "should call notify_with_bugsnag" do
-      expect(Bugsnag::Delivery::Synchronous).to receive(:deliver)
-      Bugsnag::Capistrano::Deploy.notify()
-    end
-  end
-
+describe Bugsnag::Capistrano::Release do
   describe "without notifier loadable", :without_notifier do
     it "should call notify_without bugsnag" do
-      expect(Bugsnag::Capistrano::Deploy).to receive(:deliver)
-      Bugsnag::Capistrano::Deploy.notify({:api_key => "test"})
+      expect(Bugsnag::Capistrano::Release).to receive(:deliver)
+      Bugsnag::Capistrano::Release.notify({:api_key => "test"})
     end
   end
 
@@ -42,7 +21,7 @@ describe Bugsnag::Capistrano::Deploy do
       url = "http://localhost:56456"
       stub_request(:post, url)
         .to_return(status:200, body: "")
-      Bugsnag::Capistrano::Deploy.deliver(url, nil)
+      Bugsnag::Capistrano::Release.deliver(url, nil)
     end
 
     it "delivers a body unmodified" do
@@ -59,7 +38,7 @@ describe Bugsnag::Capistrano::Deploy do
       request = stub_request(:post, url)
         .with(body: body, headers: { 'Content-Type' => 'application/json'})
         .to_return(status:200, body: "")
-      Bugsnag::Capistrano::Deploy.deliver(url, body)
+      Bugsnag::Capistrano::Release.deliver(url, body)
       assert_requested request
     end
   end
