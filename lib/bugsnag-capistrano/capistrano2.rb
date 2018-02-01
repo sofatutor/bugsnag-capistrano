@@ -13,12 +13,12 @@ module Bugsnag
                 :api_key => fetch(:bugsnag_api_key, ENV["BUGSNAG_API_KEY"]),
                 :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
                 :builder_name => fetch(:bugsnag_builder, ENV["BUGSNAG_BUILDER_NAME"] || ENV["USER"]),
-                :metadata => fetch(:bugsnag_metadata),
+                :metadata => fetch(:bugsnag_metadata, nil),
                 :release_stage => fetch(:bugsnag_env) || ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env) || fetch(:stage) || "production",
                 :revision => fetch(:current_revision, ENV["BUGSNAG_REVISION"]),
                 :repository => fetch(:repo_url, ENV["BUGSNAG_REPOSITORY"]),
                 :source_control_provider => fetch(:bugsnag_source_control_provider, ENV["BUGSNAG_SOURCE_CONTROL_PROVIDER"]),
-                :endpoint => fetch(:bugsnag_endpoint)
+                :endpoint => fetch(:bugsnag_endpoint, nil)
               })
               logger.info "Bugsnag release notification complete."
             rescue
