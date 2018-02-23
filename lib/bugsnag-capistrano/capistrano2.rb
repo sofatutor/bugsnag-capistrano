@@ -12,6 +12,7 @@ module Bugsnag
               Bugsnag::Capistrano::Release.notify({
                 :api_key => fetch(:bugsnag_api_key, ENV["BUGSNAG_API_KEY"]),
                 :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
+                :auto_assign_release => fetch(:bugsnag_auto_assign_release, nil),
                 :builder_name => fetch(:bugsnag_builder, ENV["BUGSNAG_BUILDER_NAME"] || ENV["USER"]),
                 :metadata => fetch(:bugsnag_metadata, nil),
                 :release_stage => fetch(:bugsnag_env) || ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env) || fetch(:stage) || "production",
