@@ -4,7 +4,7 @@ require 'rspec/mocks'
 
 require 'webrick'
 
-describe "bugsnag capistrano", :always do
+describe "bugsnag capistrano" do
 
   server = nil
   queue = Queue.new
@@ -32,6 +32,7 @@ describe "bugsnag capistrano", :always do
 
   it "sends a deploy notification to the set endpoint" do
     ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s + "/deploy"
+    ENV['BUGSNAG_APP_VERSION'] = "1"
 
     Dir.chdir(example_path) do
       system(exec_string)
@@ -39,6 +40,7 @@ describe "bugsnag capistrano", :always do
 
     payload = request()
     expect(payload["apiKey"]).to eq('YOUR_API_KEY')
+    expect(payload["appVersion"]).to eq("1")
     expect(payload["releaseStage"]).to eq('production')
   end
 

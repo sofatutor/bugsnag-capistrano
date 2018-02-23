@@ -39,13 +39,17 @@ module Bugsnag
           }
         }
 
-        payload_string = ::JSON.dump(parameters)
-        self.deliver(opts[:endpoint], payload_string)
+        if parameters["apiKey"].nil?
+          logger.warn("Cannot deliver notification. Missing required apiKey")
+        elsif parameters["appVersion"].nil?
+          logger.warn("Cannot deliver notification. Missing required appVersion")
+        else
+          payload_string = ::JSON.dump(parameters)
+          self.deliver(opts[:endpoint], payload_string)
+        end
       end
 
       def self.deliver(url, body)
-        logger = Logger.new(STDOUT)
-        logger.level = Logger::INFO
         begin
           request(url, body)
         rescue StandardError => e
@@ -66,6 +70,14 @@ module Bugsnag
         request = Net::HTTP::Post.new(uri, HEADERS)
         request.body = body
         http.request(request)
+      end
+
+      def self.logger
+        if @logger.nil?
+          @logger = Logger.new(STDOUT)
+          @logger.level = Logger::INFO
+        end
+        @logger
       end
     end
   end
