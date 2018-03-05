@@ -3,7 +3,6 @@ module Bugsnag
     def self.load_into(configuration)
       configuration.load do
         after "deploy",            "bugsnag:release"
-        after "deploy:migrations", "bugsnag:release"
 
         namespace :bugsnag do
           desc "Notify Bugsnag that new production code has been released"
@@ -12,7 +11,7 @@ module Bugsnag
               Bugsnag::Capistrano::Release.notify({
                 :api_key => fetch(:bugsnag_api_key, ENV["BUGSNAG_API_KEY"]),
                 :app_version => fetch(:app_version, ENV["BUGSNAG_APP_VERSION"]),
-                :auto_assign_release => fetch(:bugsnag_auto_assign_release, nil),
+                :auto_assign_release => fetch(:bugsnag_auto_assign_release, ENV["BUGSNAG_AUTO_ASSIGN_RELEASE"]),
                 :builder_name => fetch(:bugsnag_builder, ENV["BUGSNAG_BUILDER_NAME"] || ENV["USER"]),
                 :metadata => fetch(:bugsnag_metadata, nil),
                 :release_stage => fetch(:bugsnag_env) || ENV["BUGSNAG_RELEASE_STAGE"] || fetch(:rails_env) || fetch(:stage) || "production",
@@ -23,7 +22,7 @@ module Bugsnag
               })
               logger.info "Bugsnag release notification complete."
             rescue
-              logger.important("Bugnsag release notification failed, #{$!.inspect}")
+              logger.important("Bugsnag release notification failed, #{$!.inspect}")
             end
           end
         end
