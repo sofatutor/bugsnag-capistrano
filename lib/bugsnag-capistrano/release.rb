@@ -28,7 +28,7 @@ module Bugsnag
         parameters = {
           "apiKey" => opts[:api_key],
           "appVersion" => opts[:app_version],
-          "auto_assign_release" => opts[:auto_assign_release],
+          "autoAssignRelease" => opts[:auto_assign_release],
           "builderName" => opts[:builder_name],
           "buildTool" => opts[:build_tool],
           "metadata" => opts[:metadata],

@@ -52,6 +52,7 @@ describe "bugsnag capistrano" do
     ENV['BUGSNAG_APP_VERSION'] = "1"
     ENV['BUGSNAG_REPOSITORY'] = "test@repo.com:test/test_repo.git"
     ENV['BUGSNAG_SOURCE_CONTROL_PROVIDER'] = "github"
+    ENV['BUGSNAG_AUTO_ASSIGN_RELEASE'] = 'true'
 
     Dir.chdir(example_path) do
       system(exec_string)
@@ -65,6 +66,7 @@ describe "bugsnag capistrano" do
     expect(payload["sourceControl"]["revision"]).to eq("test")
     expect(payload["sourceControl"]["repository"]).to eq("test@repo.com:test/test_repo.git")
     expect(payload["sourceControl"]["provider"]).to eq("github")
+    expect(payload["autoAssignRelease"]).to eq(true)
   end
 end
 
