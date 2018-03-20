@@ -1,2 +1,0 @@
-require 'bugsnag-capistrano/tasks'
-
