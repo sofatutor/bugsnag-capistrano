@@ -1,5 +1,3 @@
-require 'pp'
-
 module Bugsnag
   module Capistrano
     def self.load_into(configuration)
