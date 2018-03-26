@@ -1,3 +1,12 @@
+## 2.0.0 (TBA)
+
+Major changes have been made with the 2.0.0 release. For a full list please consult the [upgrading guide](https://github.com/bugsnag/bugsnag-capistrano/blob/master/UPGRADING.md).
+
+### Enhancements
+
+* Rewritten tool to notify [Bugsnag build-api](https://docs.bugsnag.com/build-integrations/)
+  | [#13](https://github.com/bugsnag/bugsnag-capistrano/pull/13)
+
 ## 1.1.1 (14-12-2017)
 
 ### Fixes
