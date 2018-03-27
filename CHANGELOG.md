@@ -4,7 +4,7 @@ Major changes have been made with the 2.0.0 release. For a full list please cons
 
 ### Enhancements
 
-* Rewritten tool to notify [Bugsnag build-api](https://docs.bugsnag.com/build-integrations/)
+* Rewritten tool to notify [Bugsnag Build API](https://docs.bugsnag.com/build-integrations/)
   | [#13](https://github.com/bugsnag/bugsnag-capistrano/pull/13)
 
 ## 1.1.1 (14-12-2017)

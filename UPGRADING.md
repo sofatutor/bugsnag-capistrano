@@ -2,7 +2,7 @@
 
 ## 1.x to 2.x
 
-_Our Capistrano build-integration has changed to accommodate changes to our [build-api](https://docs.bugsnag.com/build-integrations/), and there may be changes required to continue to notify of your Capistrano releases_
+_Our Capistrano build-integration has changed to accommodate changes to our [Build API](https://docs.bugsnag.com/build-integrations/), and there may be changes required to continue to notify of your Capistrano releases_
 
 #### Heroku
 
@@ -10,7 +10,7 @@ Heroku deployment notifications have been removed from this gem. You can find in
 
 #### Rake
 
-Rake deployment notifications have been removed from this gem. While we don't have an explicit replacement for the Rake tasks, information on how to send a build notification can be found in [our build-api documentation](https://docs.bugsnag.com/build-integrations/).
+Rake deployment notifications have been removed from this gem. While we don't have an explicit replacement for the Rake tasks, information on how to send a build notification can be found in [our Build API documentation](https://docs.bugsnag.com/build-integrations/).
 
 #### Task names
 
