@@ -1,4 +1,4 @@
-## 2.0.0 (TBA)
+## 2.0.0 (29-03-2018)
 
 Major changes have been made with the 2.0.0 release. For a full list please consult the [upgrading guide](https://github.com/bugsnag/bugsnag-capistrano/blob/master/UPGRADING.md).
 
