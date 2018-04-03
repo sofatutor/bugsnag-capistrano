@@ -4,7 +4,7 @@ require 'rspec/mocks'
 
 require 'webrick'
 
-describe "bugsnag capistrano", :always do
+describe "bugsnag capistrano" do
 
   server = nil
   queue = Queue.new
@@ -29,16 +29,18 @@ describe "bugsnag capistrano", :always do
   end
 
   let(:request) { JSON.parse(queue.pop) }
-  
+
   it "sends a deploy notification to the set endpoint" do
     ENV['BUGSNAG_ENDPOINT'] = "http://localhost:" + server.config[:Port].to_s + "/deploy"
-    
+    ENV['BUGSNAG_APP_VERSION'] = "1"
+
     Dir.chdir(example_path) do
       system(exec_string)
     end
 
     payload = request()
     expect(payload["apiKey"]).to eq('YOUR_API_KEY')
+    expect(payload["appVersion"]).to eq("1")
     expect(payload["releaseStage"]).to eq('production')
   end
 
@@ -49,6 +51,8 @@ describe "bugsnag capistrano", :always do
     ENV['BUGSNAG_REVISION'] = "test"
     ENV['BUGSNAG_APP_VERSION'] = "1"
     ENV['BUGSNAG_REPOSITORY'] = "test@repo.com:test/test_repo.git"
+    ENV['BUGSNAG_SOURCE_CONTROL_PROVIDER'] = "github"
+    ENV['BUGSNAG_AUTO_ASSIGN_RELEASE'] = 'true'
 
     Dir.chdir(example_path) do
       system(exec_string)
@@ -57,9 +61,12 @@ describe "bugsnag capistrano", :always do
     payload = request()
     expect(payload["apiKey"]).to eq('this is a test key')
     expect(payload["releaseStage"]).to eq('test')
-    expect(payload["repository"]).to eq("test@repo.com:test/test_repo.git")
     expect(payload["appVersion"]).to eq("1")
-    expect(payload["revision"]).to eq("test")
+    expect(payload["sourceControl"]).to_not be_nil
+    expect(payload["sourceControl"]["revision"]).to eq("test")
+    expect(payload["sourceControl"]["repository"]).to eq("test@repo.com:test/test_repo.git")
+    expect(payload["sourceControl"]["provider"]).to eq("github")
+    expect(payload["autoAssignRelease"]).to eq(true)
   end
 end
 

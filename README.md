@@ -16,8 +16,7 @@ capturing exceptions from your applications.
 
 ## Getting started
 
-* [Integrating with Capistrano](https://docs.bugsnag.com/api/deploy-tracking/capistrano/)
-* [Integrating with Rake](https://docs.bugsnag.com/api/deploy-tracking/rake/)
+* [Integrating with Capistrano](https://docs.bugsnag.com/build-integrations/capistrano/)
 
 ## Contributing
 

@@ -25,14 +25,7 @@ end
 require 'rspec/core'
 require "rspec/core/rake_task"
 
-tags = '--format documentation --tag always '
-
-begin
-  require 'bugsnag'
-  tags += '--tag with_notifier '
-rescue LoadError
-  tags += '--tag without_notifier '
-end
+tags = '--format documentation'
 
 RSpec::Core::RakeTask.new(:spec) do |opts|
   opts.rspec_opts = tags

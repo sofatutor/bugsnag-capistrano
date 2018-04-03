@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 gem "capistrano", "~> 2.15"
 
-gem "bugsnag-capistrano", path: "../../"
+gem "bugsnag-capistrano", path: "../../", require: false
