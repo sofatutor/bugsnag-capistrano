@@ -13,7 +13,7 @@ bundle install
 
 1. In the `Capfile`, require the bugsnag-capistrano library.
 ```ruby
-require 'bugsnag/capistrano'
+require 'bugsnag-capistrano'
 ```
 
 2. Then in the same file set the `:bugsnag_api_key` to your api key
